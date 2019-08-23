@@ -34,6 +34,7 @@ group :development, :test do
 
   # Use RSpec for specs
   gem 'rspec-rails', '>= 3.5.0'
+  gem 'database_cleaner'
 
   # Secure load env vars
   gem 'dotenv-rails'
