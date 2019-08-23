@@ -22,6 +22,9 @@ gem 'mongoid', '~> 6.4.0'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+# Toolkit for the GitHub API
+gem "octokit", "~> 4.0"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
@@ -31,6 +34,9 @@ group :development, :test do
 
   # Use RSpec for specs
   gem 'rspec-rails', '>= 3.5.0'
+
+  # Secure load env vars
+  gem 'dotenv-rails'
 end
 
 group :development do
