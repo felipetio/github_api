@@ -23,13 +23,45 @@ RSpec.describe Api::V1::RepositoriesController, type: :controller do
       5.times { Repository.create! valid_attributes.merge(foo: true) }
       5.times { Repository.create! valid_attributes.merge(foo: false) }
 
-      get :index, params: {q: {foo: true}}, session: valid_session
+      get :index, params: {eq: {foo: true}}, session: valid_session
 
       items = JSON.parse(response.body)
-      expect(items.count).to eq(5) 
+      expect(items.count).to eq(5)
     end
   end
 
+  describe "get #index" do
+    it "returns a limit number of itens" do
+      10.times { Repository.create! valid_attributes }
+
+      get :index, params: {limit: 5}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(5)
+    end
+  end
+
+  describe "get #index" do
+    it "returns itens with a offset" do
+      10.times { Repository.create! valid_attributes }
+
+      get :index, params: {offset: 8}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(2)
+    end
+  end
+
+  describe "get #index" do
+    it "returns itens ordered by name" do
+      10.times { Repository.create! valid_attributes }
+
+      get :index, params: {sort: 'name'}, session: valid_session
+
+      items = JSON.parse(response.body).map{|i| i["name"]}
+      expect(items).to eq(items.sort)
+    end
+  end
 
   describe "get #show" do
     it "returns a success response" do
