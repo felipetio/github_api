@@ -18,6 +18,18 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
   end
 
+  describe "get #index" do
+    it "returns only the matching items" do
+      5.times { User.create! valid_attributes.merge(foo: true) }
+      5.times { User.create! valid_attributes.merge(foo: false) }
+
+      get :index, params: {q: {foo: true}}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(5) 
+    end
+  end
+
   describe "get #show" do
     it "returns a success response" do
       user = User.create! valid_attributes.merge(id:1)

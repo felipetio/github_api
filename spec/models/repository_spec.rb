@@ -8,7 +8,7 @@ RSpec.describe Repository, type: :model do
     10.times { Repository.create() }
 
     expect(Repository.count).to eq(20)
-    expect(Repository.where(column_name=>true).count).to eq(10)
+    expect(Repository.search(column_name=>true).count).to eq(10)
   end
 
   it "should not duplicate a entry with same id" do

@@ -1,10 +1,12 @@
 class Api::V1::RepositoriesController < ApplicationController
+  include SearchableParams
 
   # GET /api/v1/repositories
   def index
-    repositories = Repository.all
+    repositories = Repository
+    repositories = Repository.search(search_params) if search_params.present?
 
-    render json: repositories
+    render json: repositories.all
   end
 
   # GET /api/v1/repositories/1
@@ -12,10 +14,4 @@ class Api::V1::RepositoriesController < ApplicationController
     repository = Repository.find(params[:id].to_i)
     render json: repository
   end
-
-  private
-    # Only allow a trusted parameter "white list" through.
-    def repository_params
-      params.fetch(:repository, {})
-    end
 end

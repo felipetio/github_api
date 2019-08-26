@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
     10.times { User.create() }
 
     expect(User.count).to eq(20)
-    expect(User.where(column_name=>true).count).to eq(10)
+    expect(User.search(column_name=>true).count).to eq(10)
   end
 
   it "should not duplicate a entry with same id" do
