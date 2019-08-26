@@ -20,10 +20,10 @@ RSpec.describe Api::V1::RepositoriesController, type: :controller do
 
   describe "get #index" do
     it "returns only the matching items" do
-      5.times { Repository.create! valid_attributes.merge(foo: true) }
-      5.times { Repository.create! valid_attributes.merge(foo: false) }
+      5.times { Repository.create! valid_attributes.merge(has_issues: true) }
+      5.times { Repository.create! valid_attributes.merge(has_issues: false) }
 
-      get :index, params: {eq: {foo: true}}, session: valid_session
+      get :index, params: {eq: {has_issues: true}}, session: valid_session
 
       items = JSON.parse(response.body)
       expect(items.count).to eq(5)
@@ -53,13 +53,40 @@ RSpec.describe Api::V1::RepositoriesController, type: :controller do
   end
 
   describe "get #index" do
-    it "returns itens ordered by name" do
-      10.times { Repository.create! valid_attributes }
+    before(:each) do
+      2.times { Repository.create! valid_attributes.merge(forks: 0) }
+      2.times { Repository.create! valid_attributes.merge(forks: 1) }
+      2.times { Repository.create! valid_attributes.merge(forks: 2) }
+      2.times { Repository.create! valid_attributes.merge(forks: 3) }
+      2.times { Repository.create! valid_attributes.merge(forks: 4) }
+    end
 
-      get :index, params: {sort: 'name'}, session: valid_session
+    it "returns itens respecting greater than search operator" do
+      get :index, params: {gt: {forks: 1}}, session: valid_session
 
-      items = JSON.parse(response.body).map{|i| i["name"]}
-      expect(items).to eq(items.sort)
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(6)
+    end
+
+    it "returns itens respecting greater or equal than search operator" do
+      get :index, params: {gte: {forks: 1}}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(8)
+    end
+
+    it "returns itens respecting lower than search operator" do
+      get :index, params: {lt: {forks: 1}}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(2)
+    end
+
+    it "returns itens respecting lower or equal than search operator" do
+      get :index, params: {lte: {forks: 1}}, session: valid_session
+
+      items = JSON.parse(response.body)
+      expect(items.count).to eq(4)
     end
   end
 

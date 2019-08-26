@@ -14,6 +14,14 @@ module SearchableParams
 
     response[:eq] = normalize(params[:eq].permit!.to_h) if params[:eq]
 
+    response[:gt] = normalize(params[:gt].permit!.to_h) if params[:gt]
+
+    response[:gte] = normalize(params[:gte].permit!.to_h) if params[:gte]
+
+    response[:lt] = normalize(params[:lt].permit!.to_h) if params[:lt]
+
+    response[:lte] = normalize(params[:lte].permit!.to_h) if params[:lte]
+
     response
   end
 
