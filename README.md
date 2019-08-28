@@ -18,20 +18,27 @@ $ rails s
 ```
 
 ## Scraping github data
+The followings steps are necessary to connect to GitHub’s API to scrape and store Repository and User data.
 
-This steps are necessary to connect to GitHub’s API to scrape and store Repository and User data:
+### Fetching current user data
 
 ```sh
 $ cd github_api
-$ rake "github:fetch[<GITHUB_ACCESS_TOKEN>]"
+$ rake "github:fetch_me" GITHUB_ACCESS_TOKEN=your_top_secret_access_token
 ```
 
+### Fetching others public user data
+
+```sh
+$ cd github_api
+$ rake "github:fetch[felipetio,fabiofleitas]" GITHUB_ACCESS_TOKEN=your_top_secret_access_token
+```
 ### Cronjobs
 To schedule cronjobs to scrape more data you can add a `.env` file with your token to protected it.
 `GITHUB_ACCESS_TOKEN=your_top_secret_access_token`
 
 Now you can add the following comand in you corntab:
-`cd path/to/github_api && bundle exec rake github:fetch`
+`cd path/to/github_api && bundle exec rake github:fetch_me`
 
 ## Query Format
 
